@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { siteConfig } from '@/lib/site-config';
+import BrandMark from '@/components/chrome/BrandMark';
 import { resolveChrome } from '@/lib/chrome';
 import { capabilityNavLinks } from '@/lib/capabilities';
 import { DURATION, transition } from '@/lib/motion';
@@ -14,7 +15,7 @@ function LiveScoreChip() {
   return (
     <Link
       href="/ao-vivo"
-      className="inline-flex min-h-11 items-center gap-2 rounded bg-[#E11D48] px-3 text-[10px] font-bold uppercase tracking-wider text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      className="inline-flex min-h-11 items-center gap-2 rounded bg-accent px-3 text-[10px] font-bold uppercase tracking-wider text-masthead focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
     >
       <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white motion-reduce:animate-none" />
       Ao vivo
@@ -68,7 +69,7 @@ export function BroadcastScoreboardHeader() {
   return (
     <header
       className={cn(
-        'z-50 border-b border-primary/80 bg-[#0B3D2E] text-white',
+        'z-50 border-b border-accent/40 bg-masthead text-white',
         chrome.stickyMode !== 'none' && 'sticky top-0'
       )}
     >
@@ -78,18 +79,10 @@ export function BroadcastScoreboardHeader() {
           compressed && chrome.stickyMode === 'compact' ? 'py-1.5' : 'py-2.5'
         )}
       >
-        <Link href="/" className="min-w-0">
-          <p
-            className={cn(
-              'truncate font-display uppercase tracking-[0.06em]',
-              chrome.logoScale === 'compact' ? 'text-xl' : 'text-2xl md:text-3xl',
-              compressed && 'md:text-2xl'
-            )}
-          >
-            {siteConfig.siteName}
-          </p>
+        <Link href="/" className="min-w-0" aria-label={siteConfig.siteName}>
+          <BrandMark compressed={compressed} showDomain={!compressed && !tagline} />
           {tagline && !compressed ? (
-            <p className="truncate text-[10px] uppercase tracking-[0.2em] text-white/55">
+            <p className="mt-1 truncate pl-[3.15rem] text-[10px] uppercase tracking-[0.18em] text-white/55">
               {tagline}
             </p>
           ) : null}
@@ -110,7 +103,7 @@ export function BroadcastScoreboardHeader() {
         </div>
         <button
           type="button"
-          className="min-h-11 bg-[#E11D48] px-4 text-xs font-bold uppercase md:hidden"
+          className="min-h-11 bg-accent px-4 text-xs font-bold uppercase text-masthead md:hidden"
           aria-expanded={menuOpen}
           aria-controls={menuId}
           onClick={() => setMenuOpen((v) => !v)}
@@ -252,7 +245,7 @@ export function NewsroomCommandHeader({
         {chrome.signatureModule === 'breaking-command-strip' ||
         chrome.breakingPosition === 'inside-header' ? (
           <p className="hidden min-w-0 flex-1 truncate text-sm font-medium text-white/90 md:block">
-            <span className="mr-2 rounded bg-[#E11D48] px-1.5 py-0.5 text-[10px] font-bold uppercase">
+            <span className="mr-2 rounded bg-accent px-1.5 py-0.5 text-[10px] font-bold uppercase text-masthead">
               Urgente
             </span>
             {breakingText ||

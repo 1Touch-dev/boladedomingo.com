@@ -1,22 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Oswald:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap');
 
 /**
- * Design Tokens - Auto-generated
- * Design: Futebol em Foco
- * Archetype: brief-composed
- * Version: 1.0.0
- * Generated: 2026-09-28T06:59:17.525Z
+ * Design Tokens — Bola de Domingo (boladedomingo.com)
+ * Sunday pitch: cream paper, deep green masthead, sun gold.
  */
 
 :root {
-  --color-primary: #0B7A3B;
-  --color-secondary: #21F921;
-  --color-accent: #BB55B9;
-  --color-background: #121212;
-  --color-surface: #1E1E1E;
-  --color-text: #DDDDDD;
-  --color-muted-text: #AAAAAA;
-  --color-success: #28A745;
+  --color-primary: #146C3A;
+  --color-secondary: #10281C;
+  --color-accent: #E8B923;
+  --color-masthead: #0C2E22;
+  --color-background: #F4EFE4;
+  --color-surface: #FFFCF7;
+  --color-text: #1A211C;
+  --color-muted-text: #6B6459;
+  --color-success: #1F7A45;
   --spacing-0: 4px;
   --spacing-1: 8px;
   --spacing-2: 12px;
@@ -29,10 +27,10 @@
   --radius-1: 8px;
   --radius-2: 12px;
   --radius-3: 16px;
-  --font-display: Outfit;
-  --font-heading: Outfit;
-  --font-body: 'Open Sans';
-  --font-article: Lora;
+  --font-display: Oswald;
+  --font-heading: Oswald;
+  --font-body: 'Source Sans 3';
+  --font-article: 'Libre Baskerville';
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-bold: 700;

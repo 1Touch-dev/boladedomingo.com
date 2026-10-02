@@ -36,7 +36,7 @@ export default function CategoryNav() {
     <nav
       className={cn(
         'border-b',
-        dark ? 'border-white/10 bg-[#0B3D2E]' : 'border-black/10 bg-background'
+        dark ? 'border-white/10 bg-masthead' : 'border-black/10 bg-background'
       )}
       aria-label="Categorias"
     >

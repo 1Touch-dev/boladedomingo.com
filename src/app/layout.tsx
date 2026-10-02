@@ -19,6 +19,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: siteConfig.siteName,
     description: siteConfig.description,
+    siteName: siteConfig.siteName,
+    url: siteConfig.seo.canonicalHost,
     locale: siteConfig.locale.dialect.replace('-', '_'),
     images: [{ url: siteConfig.seo.defaultOgImage }],
   },

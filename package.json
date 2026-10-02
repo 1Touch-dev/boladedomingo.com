@@ -1,7 +1,7 @@
 {
-  "name": "bola-de-domingo-teste",
+  "name": "boladedomingo",
   "version": "1.0.0",
-  "description": "Brazil CMS News Portal Template - Brazilian Portuguese",
+  "description": "Bola de Domingo — futebol brasileiro em boladedomingo.com",
   "private": true,
   "scripts": {
     "dev": "next dev",

@@ -158,8 +158,8 @@ export interface SiteConfig {
 
 export const siteConfig: SiteConfig = {
   siteName: "Bola de Domingo",
-  tagline: "Futebol, resultados e paixão de domingo a domingo",
-  description: "Futebol, resultados e paixão de domingo a domingo",
+  tagline: "O futebol do domingo, o ano inteiro",
+  description: "Bola de Domingo cobre o futebol brasileiro em boladedomingo.com: Brasileirão, Copa do Brasil, Libertadores, Seleção e o mercado da bola.",
   locale: {"language":"pt","dialect":"pt-BR","timezone":"America/Sao_Paulo"},
   cms: {
     baseUrl: process.env.NEXT_PUBLIC_CMS_URL || 'https://api.football360brazil.com/api',
@@ -167,6 +167,7 @@ export const siteConfig: SiteConfig = {
     collections: ["feed_brazil","aiarticles"],
   },
   seo: {
+    canonicalHost: "https://boladedomingo.com",
     defaultOgImage: "/og-image.jpg",
   },
   layouts: {

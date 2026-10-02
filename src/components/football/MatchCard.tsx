@@ -114,14 +114,14 @@ export default function MatchCard({
       className={cn(
         'rounded-xl border border-black/[0.08] bg-white px-4 py-3.5 transition-colors duration-150',
         'hover:border-primary/40',
-        live && 'border-primary/30 bg-[#0B3D2E] text-white hover:border-accent/50'
+        live && 'border-primary/30 bg-masthead text-white hover:border-accent/50'
       )}
     >
       <div className="flex items-center justify-between gap-3 text-[11px] font-semibold uppercase tracking-wide">
         <span className={cn(live ? 'text-accent' : 'text-muted')}>
           {live ? (
             <span className="inline-flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#E11D48] motion-reduce:animate-none" />
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent motion-reduce:animate-none" />
               {match.status}
             </span>
           ) : scheduled ? (

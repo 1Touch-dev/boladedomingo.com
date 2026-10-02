@@ -141,7 +141,7 @@ function RotatingBanner({ headlines }: BreakingNewsProps) {
       }}
     >
       <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-2.5">
-        <span className="shrink-0 rounded bg-accent px-2 py-0.5 text-[10px] font-bold uppercase text-white">
+        <span className="shrink-0 rounded bg-accent px-2 py-0.5 text-[10px] font-bold uppercase text-masthead">
           Agora
         </span>
         <p className="flex-1 text-sm font-medium text-foreground transition-opacity duration-300">

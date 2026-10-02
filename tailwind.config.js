@@ -11,6 +11,7 @@ module.exports = {
         primary: 'var(--color-primary)',
         secondary: 'var(--color-secondary)',
         accent: 'var(--color-accent)',
+        masthead: 'var(--color-masthead)',
         background: 'var(--color-background)',
         surface: 'var(--color-surface)',
         foreground: 'var(--color-text)',

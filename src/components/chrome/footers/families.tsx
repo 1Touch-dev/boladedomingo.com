@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import BrandMark from '@/components/chrome/BrandMark';
 import { siteConfig } from '@/lib/site-config';
 import { resolveChrome } from '@/lib/chrome';
 import { cn } from '@/lib/utils';
@@ -9,7 +10,7 @@ const year = () => new Date().getFullYear();
 export function SportsClubhouseFooter() {
   const cfg = resolveChrome().footer;
   return (
-    <footer className="mt-auto bg-[#0B3D2E] text-white">
+    <footer className="mt-auto bg-masthead text-white">
       <div className="mx-auto max-w-7xl px-4 py-12">
         <div
           className={cn(
@@ -20,16 +21,14 @@ export function SportsClubhouseFooter() {
           )}
         >
           <div>
-            <p className="font-display text-4xl uppercase tracking-wide">
-              {siteConfig.siteName}
-            </p>
+            <BrandMark size="footer" />
             <p className="mt-2 max-w-md text-sm text-white/70">
               {siteConfig.tagline || siteConfig.description}
             </p>
             {cfg.showAppPromotion ? (
               <Link
                 href="/ao-vivo"
-                className="mt-4 inline-flex min-h-11 items-center rounded bg-[#E11D48] px-4 text-xs font-bold uppercase"
+                className="mt-4 inline-flex min-h-11 items-center rounded bg-accent px-4 text-xs font-bold uppercase text-masthead"
               >
                 Ver placar ao vivo
               </Link>
@@ -83,7 +82,7 @@ export function SportsClubhouseFooter() {
           </div>
         </div>
         <p className="mt-10 border-t border-white/20 pt-6 text-xs text-white/60">
-          © {year()} {siteConfig.siteName}. Todos os direitos reservados.
+          © {year()} {siteConfig.siteName} · boladedomingo.com. Todos os direitos reservados.
         </p>
       </div>
     </footer>

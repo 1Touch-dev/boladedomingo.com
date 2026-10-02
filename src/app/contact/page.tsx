@@ -9,9 +9,17 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
-      <h1 className="font-display text-4xl text-secondary">Contato</h1>
+      <h1 className="font-display text-4xl uppercase tracking-wide text-secondary">Contato</h1>
       <p className="mt-2 text-muted">
-        Envie sua mensagem, sugestão de pauta ou denúncia para nossa redação.
+        Pauta, correção ou parceria: escreva para a redação de {siteConfig.siteName}.
+      </p>
+      <p className="mt-4">
+        <a
+          href="mailto:redacao@boladedomingo.com"
+          className="font-semibold text-primary hover:underline"
+        >
+          redacao@boladedomingo.com
+        </a>
       </p>
       <form className="mt-8 space-y-4">
         <div>
