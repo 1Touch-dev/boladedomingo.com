@@ -1,33 +1,35 @@
 {
   "name": "boladedomingo",
-  "version": "1.0.0",
-  "description": "Bola de Domingo — futebol brasileiro em boladedomingo.com",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "precommit": "yarn lint && yarn build",
+    "prepare": "husky"
   },
   "dependencies": {
-    "autoprefixer": "^10.4.20",
-    "framer-motion": "^11.18.2",
-    "next": "15.2.6",
-    "postcss": "^8.4.49",
-    "react": "^18.3.0",
-    "react-dom": "^18.3.0",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5.0.0"
+    "@tanstack/react-query": "^5.104.0",
+    "axios": "^1.20.0",
+    "next": "15.5.22",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-hook-form": "^7.89.0"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "@types/react": "^18.3.0",
-    "@types/react-dom": "^18.3.0",
-    "eslint": "^8.0.0",
-    "eslint-config-next": "15.2.6"
+    "@eslint/eslintrc": "^3.3.6",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.22",
+    "husky": "9.1.7",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   },
-  "engines": {
-    "node": ">=18.0.0"
-  }
+  "packageManager": "yarn@1.22.22"
 }

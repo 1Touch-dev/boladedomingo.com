@@ -1,80 +1,86 @@
-import '../../generated/design-tokens.css';
-import './globals.css';
-import type { Metadata } from 'next';
-import ChromeHost from '@/components/chrome/ChromeHost';
-import Footer from '@/components/chrome/Footer';
-import { getAlerts, getBreakingHeadlines } from '@/lib/cms-client';
-import { siteConfig } from '@/lib/site-config';
-import { hasCapability } from '@/lib/capabilities';
+import type { Metadata } from "next";
+import { QueryProvider } from "@/components/QueryProvider";
+import { Newsreader, Outfit } from "next/font/google";
+import { site } from "@/config/site";
+import { SiteShell } from "@/components/SiteShell";
+import "./globals.css";
+
+export const revalidate = 120;
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
+});
+
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  variable: "--font-newsreader",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
   title: {
-    template: `%s | ${siteConfig.siteName}`,
-    default: siteConfig.siteName,
+    default: `${site.name} | ${site.tagline}`,
+    template: `%s`,
   },
-  description: siteConfig.description,
-  metadataBase: siteConfig.seo.canonicalHost
-    ? new URL(siteConfig.seo.canonicalHost)
-    : undefined,
+  description: site.description,
+  applicationName: site.name,
+  keywords: [...site.keywords],
+  authors: [{ name: site.name, url: site.url }],
   openGraph: {
-    title: siteConfig.siteName,
-    description: siteConfig.description,
-    siteName: siteConfig.siteName,
-    url: siteConfig.seo.canonicalHost,
-    locale: siteConfig.locale.dialect.replace('-', '_'),
-    images: [{ url: siteConfig.seo.defaultOgImage }],
+    type: "website",
+    locale: "pt_BR",
+    siteName: site.name,
+  },
+  alternates: {
+    types: { "application/rss+xml": "/rss.xml" },
   },
 };
 
-export default async function RootLayout({
-  children,
-}: {
+const organization = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      name: site.name,
+      url: site.url,
+      description: site.description,
+      inLanguage: "pt-BR",
+    },
+    {
+      "@type": "NewsMediaOrganization",
+      name: site.name,
+      url: site.url,
+      email: site.email,
+      logo: { "@type": "ImageObject", url: `${site.url}/icon` },
+      publishingPrinciples: `${site.url}/sobre`,
+      areaServed: {
+        "@type": "Country",
+        name: "Brasil",
+      },
+    },
+  ],
+};
+
+interface IRootLayoutProps {
   children: React.ReactNode;
-}) {
-  const headlines = hasCapability('breaking-ticker')
-    ? await getBreakingHeadlines()
-    : [];
-  const alerts = hasCapability('alerts-rail') ? await getAlerts(4) : [];
-  const density = siteConfig.density ?? 'balanced';
-  const densityClass =
-    density === 'high'
-      ? 'density-high'
-      : density === 'low'
-        ? 'density-low'
-        : 'density-balanced';
-  const motion = siteConfig.motion ?? 'moderate';
-  const motionClass = `motion-${motion}`;
+}
+
+const RootLayout = (props: IRootLayoutProps) => {
+  const { children } = props;
 
   return (
-    <html lang="pt-BR">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-      </head>
-      <body
-        data-layout={siteConfig.layouts.homepage}
-        data-density={density}
-        data-motion={motion}
-        data-header-family={siteConfig.chrome?.header?.family || 'legacy'}
-        data-footer-family={siteConfig.chrome?.footer?.family || 'legacy'}
-        className={`flex min-h-screen flex-col overflow-x-hidden ${densityClass} ${motionClass}`}
-      >
-        <a
-          href="#conteudo-principal"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-white focus:px-3 focus:py-2 focus:ring"
-        >
-          Pular para o conteúdo
-        </a>
-        <ChromeHost headlines={headlines} alerts={alerts} />
-        <main id="conteudo-principal" className="flex-1 min-w-0">
-          {children}
-        </main>
-        <Footer />
+    <html lang="pt-BR" className={`${outfit.variable} ${newsreader.variable} h-full antialiased`}>
+      <body className="min-h-full bg-page font-sans text-ink">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />
+        <QueryProvider>
+          <SiteShell>{children}</SiteShell>
+        </QueryProvider>
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

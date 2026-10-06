@@ -1,163 +1,88 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    @apply min-h-screen bg-background font-body text-foreground antialiased;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply font-heading;
-  }
-
-  a {
-    @apply transition-colors;
-  }
-
-  :focus-visible {
-    @apply outline-2 outline-offset-2 outline-primary;
-  }
+:root {
+  --page: #f1efea;
+  --panel: #faf8f5;
+  --ink: #1c1916;
+  --asphalt: #231910;
+  --mast: #3a2c22;
+  --accent: #9a3412;
+  --highlight: #5b4636;
+  --line: #e2dcd3;
+  --muted: #6b6158;
 }
 
-@layer utilities {
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+@theme inline {
+  --color-page: var(--page);
+  --color-panel: var(--panel);
+  --color-ink: var(--ink);
+  --color-asphalt: var(--asphalt);
+  --color-mast: var(--mast);
+  --color-accent: var(--accent);
+  --color-highlight: var(--highlight);
+  --color-line: var(--line);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-outfit);
+  --font-display: var(--font-newsreader);
+}
 
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
+html {
+  scroll-behavior: smooth;
+}
 
-  .animate-ticker {
-    animation: ticker 40s linear infinite;
-  }
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-outfit), sans-serif;
+}
 
-  .animate-ticker-paused {
-    animation-play-state: paused;
-  }
+::selection {
+  background: var(--accent);
+  color: var(--panel);
+}
 
-  @keyframes ticker {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
-  }
+.score-strip {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
 
-  .animate-shimmer {
-    background: linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0.06) 0%,
-      rgba(0, 0, 0, 0.12) 50%,
-      rgba(0, 0, 0, 0.06) 100%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.2s ease-in-out infinite;
-  }
+.score-strip::-webkit-scrollbar {
+  display: none;
+}
 
-  @keyframes shimmer {
-    0% {
-      background-position: 100% 0;
-    }
-    100% {
-      background-position: -100% 0;
-    }
-  }
+.cms-body {
+  overflow-wrap: break-word;
+}
 
-  @media (prefers-reduced-motion: reduce) {
-    .animate-ticker,
-    .animate-shimmer {
-      animation: none;
-    }
-  }
+.cms-body h2,
+.cms-body h3 {
+  margin-top: 1.5rem;
+  font-family: var(--font-newsreader), serif;
+  font-weight: 600;
+}
 
-  /* Density variants — driven by siteConfig.density on <body> */
-  .density-high main {
-    --section-gap: 1rem;
-  }
+.cms-body p {
+  margin-top: 1rem;
+}
 
-  .density-balanced main {
-    --section-gap: 1.5rem;
-  }
+.cms-body a {
+  color: var(--accent);
+}
 
-  .density-low main {
-    --section-gap: 2.5rem;
-  }
+.cms-body img,
+.cms-body table,
+.cms-body pre,
+.cms-body video {
+  max-width: 100%;
+  height: auto;
+}
 
-  .density-high .prose {
-    font-size: 0.95rem;
-    line-height: 1.55;
-  }
+.cms-body pre {
+  overflow-x: auto;
+}
 
-  .density-low .prose {
-    font-size: 1.125rem;
-    line-height: 1.85;
-  }
-
-  /* Motion levels — siteConfig.motion on <body> */
-  .motion-none .animate-ticker {
-    animation: none !important;
-  }
-
-  .motion-restrained .motion-enter {
-    transition: opacity 0.2s ease;
-  }
-
-  .motion-moderate .motion-enter,
-  .motion-energetic .motion-enter {
-    animation: fade-up 0.45s ease both;
-  }
-
-  .motion-energetic a:hover {
-    transition: color 0.15s ease, transform 0.15s ease;
-  }
-
-  @keyframes fade-up {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .motion-enter,
-    .motion-energetic a:hover {
-      animation: none !important;
-      transition: none !important;
-    }
-
-    .animate-ping {
-      animation: none !important;
-    }
-  }
-
-  /* Studio archetype accents */
-  [data-layout='broadcast-grid'] {
-    --section-gap: 0.75rem;
-  }
-
-  [data-layout='premium-magazine'] {
-    --section-gap: 2.5rem;
-  }
-
-  [data-layout='premium-magazine'] .prose {
-    font-size: 1.125rem;
-    line-height: 1.85;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
