@@ -29,7 +29,7 @@ Editorial notes come from Brazil CMS: `GET {NEXT_PUBLIC_CMS_URL}/ai-articles?tar
 
 Scheduled articles in the future and `publishState=needs_review` stay off the desk. If the catalog is empty or the host fails, pages fall back to `src/data/domingo.ts`.
 
-Fixtures and both standings tables stay derived from signed seed. They are not the shared `/football/standings` extract.
+Fixtures stay on the signed seed until `GET /football/matches?website=` returns rows whose two sides are praças or tardes. Club and federation extracts are dropped. A finished row links to `/resultados/[id]`, the súmula. Rodada da Copa still stays out of the Taça de Domingo table.
 
 ## Newsletter
 

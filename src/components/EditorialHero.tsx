@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import type { IEditorialBanner } from "@/lib/banners";
+import { prepareBannerHtml, sameSitePath } from "@/lib/bannerLinks";
 
 interface IEditorialHeroProps {
   banners: IEditorialBanner[];
@@ -18,9 +19,9 @@ const Frame = (props: { banner: IEditorialBanner }) => {
       <iframe
         className="block h-full w-full overflow-hidden border-0"
         title={banner.title || "Destaque"}
-        sandbox="allow-popups allow-popups-to-escape-sandbox"
+        sandbox="allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
         scrolling="no"
-        srcDoc={`${heroFitStyle}${banner.htmlContent}`}
+        srcDoc={`${heroFitStyle}${prepareBannerHtml(banner.htmlContent)}`}
       />
     );
   }
@@ -39,8 +40,9 @@ const Frame = (props: { banner: IEditorialBanner }) => {
   );
 
   if (banner.ctaUrl) {
+    const ctaHref = sameSitePath(banner.ctaUrl) ?? banner.ctaUrl;
     return (
-      <a href={banner.ctaUrl} className="relative block h-full w-full">
+      <a href={ctaHref} className="relative block h-full w-full">
         {image}
         {caption}
       </a>

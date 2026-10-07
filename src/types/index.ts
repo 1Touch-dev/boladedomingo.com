@@ -105,3 +105,11 @@ export interface ISlugParams {
 export interface ISlugPageProps {
   params: Promise<ISlugParams>;
 }
+
+export interface IFixtureParams {
+  id: string;
+}
+
+export interface IFixturePageProps {
+  params: Promise<IFixtureParams>;
+}

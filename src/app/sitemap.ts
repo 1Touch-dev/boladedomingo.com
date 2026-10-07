@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { site } from "@/config/site";
 import { categorias, pracas } from "@/data";
 import { loadDeskArticles } from "@/lib/deskArticles";
+import { loadDeskFixtures } from "@/lib/deskFixtures";
 
 const TWO_DAYS = 2 * 24 * 60 * 60 * 1000;
 
@@ -44,6 +45,12 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
     ...categorias.map((item) => ({
       url: `${site.url}/categorias/${item.slug}`,
       lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.5,
+    })),
+    ...(await loadDeskFixtures()).map((fixture) => ({
+      url: `${site.url}/resultados/${fixture.id}`,
+      lastModified: new Date(fixture.startsAt),
       changeFrequency: "weekly" as const,
       priority: 0.5,
     })),

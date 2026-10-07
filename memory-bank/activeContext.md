@@ -23,6 +23,10 @@ Launch desk for `boladedomingo.com`: Sunday football across Brazil, read from SÃ
 
 ## Recent
 
+- Resultados rows open `/resultados/[id]`. The website matches call times out after 8 seconds and the signed seed stays on the desk. Federation extracts stay off.
+
+- Hero HTML banners rewrite `boladedomingo.com` links to a same-site path and open them with `target="_top"`, so a click does not load the live host inside the sandboxed frame.
+
 - SEO/GEO pass on the existing pt-BR desk: sitemap priorities, Google News sitemap, AI crawler allows in robots, richer `llms.txt`, BreadcrumbList, SportsEvent on the calendar, `next/image` for covers and partner slots, www and locale 308s, error boundaries. No IndexNow key and no extra locales.
 
 - Frontend site contract: publish filter (`published` and legacy past schedule; `ready` and `needs_review` are 404), article meta from `seo`, one NewsArticle JSON-LD plus at most one FAQPage, FAQ accordion, comment-stripped body, YouTube embeds, editorial hero iframe, partner slots, reader sentiment, newsletter POST to the CMS `/subscriptions/subscribe`, and `/newsletter/unsubscribe`.

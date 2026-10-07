@@ -152,15 +152,23 @@ export const FixtureRow = (props: IFixtureRowProps) => {
             <span className="truncate">{sideName(fixture.homeSlug)}</span>
             <Crest slug={fixture.homeSlug} size="xs" />
           </Link>
-          <p className="shrink-0 bg-asphalt px-2 py-1 text-center font-display text-lg text-panel tabular-nums">
+          <Link
+            href={`/resultados/${fixture.id}`}
+            className="shrink-0 bg-asphalt px-2 py-1 text-center font-display text-lg text-panel tabular-nums hover:bg-accent"
+          >
             {fixture.score ?? (fixture.status === FixtureStatusEnum.PROGRAMADO ? "vs" : "—")}
-          </p>
+          </Link>
           <Link href={sideHref(fixture.awaySlug)} className="flex min-w-0 items-center gap-2 text-sm font-medium hover:text-accent">
             <Crest slug={fixture.awaySlug} size="xs" />
             <span className="min-w-0 truncate">{sideName(fixture.awaySlug)}</span>
           </Link>
         </div>
-        <p className="mt-1 text-xs text-muted">{fixture.venue}</p>
+        <p className="mt-1 flex flex-wrap items-center gap-x-3 text-xs text-muted">
+          <span>{fixture.venue}</span>
+          <Link href={`/resultados/${fixture.id}`} className="font-semibold tracking-wide text-accent uppercase">
+            {fixture.status === FixtureStatusEnum.FINAL ? "Súmula" : "Ficha"}
+          </Link>
+        </p>
       </div>
     </article>
   );
