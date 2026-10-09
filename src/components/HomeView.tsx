@@ -124,18 +124,18 @@ export const HomeView = async () => {
           </article>
           <ol className="divide-y divide-line border-t border-line lg:border-t-0 lg:border-l">
             {rail.map((article) => (
-              <li key={article.slug} className="py-4 lg:px-6">
-                <p className="text-[11px] font-semibold tracking-[0.12em] text-highlight uppercase">
-                  {article.sectionLabel || categoriaName(article.categoria)}
-                </p>
-                <h2 className="mt-1 font-display text-xl leading-snug font-semibold">
-                  <Link href={`/noticias/${article.slug}`} className="hover:text-accent">
+              <li key={article.slug}>
+                <Link href={`/noticias/${article.slug}`} className="group block py-4 hover:bg-page lg:px-6">
+                  <p className="text-[11px] font-semibold tracking-[0.12em] text-highlight uppercase">
+                    {article.sectionLabel || categoriaName(article.categoria)}
+                  </p>
+                  <h2 className="mt-1 font-display text-xl leading-snug font-semibold group-hover:text-accent">
                     {article.title}
-                  </Link>
-                </h2>
-                <p className="mt-1 text-xs text-muted">
-                  {formatPublished(article.publishedAt)} · {minutesFor(article.excerpt, article.paragraphs)} min
-                </p>
+                  </h2>
+                  <p className="mt-1 text-xs text-muted">
+                    {formatPublished(article.publishedAt)} · {minutesFor(article.excerpt, article.paragraphs)} min
+                  </p>
+                </Link>
               </li>
             ))}
           </ol>
@@ -156,19 +156,22 @@ export const HomeView = async () => {
           <SectionHeading title="Últimas notas" href="/noticias" />
           <ul className="grid gap-4 md:grid-cols-2">
             {latest.map((article) => (
-              <li key={article.slug} className="border border-line bg-panel p-5">
-                <p className="text-[11px] font-semibold tracking-[0.12em] text-accent uppercase">
-                  {article.sectionLabel || categoriaName(article.categoria)}
-                </p>
-                <h3 className="mt-2 font-display text-2xl leading-snug font-semibold">
-                  <Link href={`/noticias/${article.slug}`} className="hover:text-accent">
+              <li key={article.slug}>
+                <Link
+                  href={`/noticias/${article.slug}`}
+                  className="group block h-full border border-line bg-panel p-5 hover:border-accent hover:bg-page"
+                >
+                  <p className="text-[11px] font-semibold tracking-[0.12em] text-accent uppercase">
+                    {article.sectionLabel || categoriaName(article.categoria)}
+                  </p>
+                  <h3 className="mt-2 font-display text-2xl leading-snug font-semibold group-hover:text-accent">
                     {article.title}
-                  </Link>
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{article.excerpt}</p>
-                <p className="mt-3 text-xs text-muted">
-                  {formatPublished(article.publishedAt)} · {minutesFor(article.excerpt, article.paragraphs)} min
-                </p>
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{article.excerpt}</p>
+                  <p className="mt-3 text-xs text-muted">
+                    {formatPublished(article.publishedAt)} · {minutesFor(article.excerpt, article.paragraphs)} min
+                  </p>
+                </Link>
               </li>
             ))}
           </ul>

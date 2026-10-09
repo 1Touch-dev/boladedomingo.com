@@ -26,20 +26,22 @@ const NewsPage = async () => {
       />
       <div className="mt-8 divide-y divide-line border-y border-line">
         {stories.map((article) => (
-          <article key={article.slug} className="grid gap-2 py-5 sm:grid-cols-[9rem_1fr]">
+          <Link
+            key={article.slug}
+            href={`/noticias/${article.slug}`}
+            className="group grid gap-2 py-5 hover:bg-panel sm:grid-cols-[9rem_1fr]"
+          >
             <p className="text-sm text-muted">{formatPublished(article.publishedAt)}</p>
-            <div>
-              <p className="text-[11px] font-semibold tracking-[0.12em] text-accent uppercase">
+            <span>
+              <span className="block text-[11px] font-semibold tracking-[0.12em] text-accent uppercase">
                 {categoriaName(article.categoria)} · {article.author}
-              </p>
-              <h2 className="mt-1 font-display text-3xl leading-tight font-semibold">
-                <Link href={`/noticias/${article.slug}`} className="hover:text-accent">
-                  {article.title}
-                </Link>
+              </span>
+              <h2 className="mt-1 font-display text-3xl leading-tight font-semibold group-hover:text-accent">
+                {article.title}
               </h2>
               <p className="mt-2 max-w-2xl text-muted">{article.excerpt}</p>
-            </div>
-          </article>
+            </span>
+          </Link>
         ))}
       </div>
     </Container>
