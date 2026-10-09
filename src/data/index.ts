@@ -149,6 +149,12 @@ export const scheduledFixtures = () =>
     .filter((fixture) => fixture.status === FixtureStatusEnum.PROGRAMADO)
     .sort((a, b) => a.startsAt.localeCompare(b.startsAt));
 
+export const upcomingFixtures = (now = Date.now()) =>
+  scheduledFixtures().filter((fixture) => {
+    const kickoff = Date.parse(fixture.startsAt);
+    return Number.isFinite(kickoff) && kickoff >= now;
+  });
+
 export const finishedFixtures = () =>
   [...fixtures]
     .filter((fixture) => fixture.status === FixtureStatusEnum.FINAL)

@@ -25,6 +25,11 @@ export const GET = async () => {
       <link>${site.url}</link>
       <description>${escapeXml(site.description)}</description>
       <language>pt-BR</language>
+      <image>
+        <url>${site.url.replace(/\/$/, "")}/logo.png</url>
+        <title>${escapeXml(site.name)}</title>
+        <link>${site.url.replace(/\/$/, "")}/</link>
+      </image>
       ${items}
     </channel>
   </rss>`;

@@ -11,6 +11,7 @@ import {
   sideName,
   sideShort,
   tardes,
+  upcomingFixtures,
 } from "@/data";
 import { loadDeskArticles } from "@/lib/deskArticles";
 import { loadEditorialBanners, loadPartnerBanners } from "@/lib/banners";
@@ -19,7 +20,9 @@ import { FooterNewsletter } from "@/components/FooterNewsletter";
 import { PartnerStrip } from "@/components/PartnerStrip";
 import { formatKickoff, formatPublished, readingMinutes } from "@/lib/format";
 import { FixtureStatusEnum, type IFixture } from "@/types";
-import { Container, SectionHeading } from "@/components/ui";
+import { Container, Crest, SectionHeading } from "@/components/ui";
+import { TeamLogo } from "@/components/TeamLogo";
+import { getContextMatches, getScheduledContextMatches } from "@/lib/contextFixtures";
 import { StandingsTable } from "@/components/StandingsTable";
 
 const minutesFor = (excerpt: string, paragraphs: string[]) => readingMinutes(`${excerpt} ${paragraphs.join(" ")}`);
@@ -43,10 +46,12 @@ const ScoreChip = (props: IScoreChipProps) => {
   return (
     <article className="flex shrink-0 items-center gap-3 border-r border-white/10 px-4 py-2">
       <p className="max-w-28 truncate text-[10px] tracking-wide text-panel/50 uppercase">{fixture.competition}</p>
+      <Crest slug={fixture.homeSlug} size="xs" />
       <p className="text-xs font-semibold text-panel">{sideShort(fixture.homeSlug)}</p>
       <p className={`min-w-12 px-2 py-0.5 text-center text-sm font-semibold tabular-nums ${live ? "bg-white/10 text-panel" : "bg-accent text-panel"}`}>
         {mark}
       </p>
+      <Crest slug={fixture.awaySlug} size="xs" />
       <p className="text-xs font-semibold text-panel">{sideShort(fixture.awaySlug)}</p>
     </article>
   );
@@ -68,15 +73,19 @@ const DeskStat = (props: IDeskStatProps) => {
 };
 
 export const HomeView = async () => {
-  const [stories, hero, contentPartners] = await Promise.all([
+  const [stories, hero, contentPartners, matches, marked] = await Promise.all([
     loadDeskArticles(),
     loadEditorialBanners(),
     loadPartnerBanners("content"),
+    getContextMatches(),
+    getScheduledContextMatches(),
   ]);
   const [featured, ...rest] = stories;
   const rail = rest.slice(0, 4);
   const latest = rest.slice(4);
-  const upcoming = scheduledFixtures().slice(0, 4);
+  const ahead = upcomingFixtures();
+  const upcoming = (ahead.length > 0 ? ahead : scheduledFixtures()).slice(0, 4);
+  const roundTitle = ahead.length > 0 ? "Marcados" : "Súmula em aberto";
   const ticker = [...finishedFixtures().slice(0, 6), ...scheduledFixtures().slice(0, 4)];
 
   if (!featured) return null;
@@ -99,6 +108,44 @@ export const HomeView = async () => {
           </div>
         </Container>
       </div>
+
+      {matches.length > 0 || marked.length > 0 ? (
+        <Container className="py-6">
+          <div className="mb-2 flex items-end justify-between gap-3">
+            <h2 className="font-display text-2xl font-semibold">Seleção</h2>
+            <Link href="/resultados" className="text-xs font-semibold tracking-[0.14em] text-accent uppercase">
+              Resultados
+            </Link>
+          </div>
+          {matches.length > 0 ? (
+            <ul className="score-strip flex min-w-0 gap-3 overflow-x-auto pb-1">
+              {matches.slice(0, 4).map((match) => (
+                <li key={match.id} className="flex shrink-0 items-center gap-2 border border-line bg-panel px-3 py-3">
+                  <TeamLogo src={match.homeLogo} label={match.homeName} size="xs" />
+                  <span className="text-sm font-semibold">{match.homeName}</span>
+                  <span className="bg-asphalt px-2 py-0.5 text-xs font-semibold text-panel">{match.score}</span>
+                  <span className="text-sm font-semibold">{match.awayName}</span>
+                  <TeamLogo src={match.awayLogo} label={match.awayName} size="xs" />
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          {marked.length > 0 ? (
+            <ul className="score-strip mt-3 flex min-w-0 gap-3 overflow-x-auto pb-1">
+              {marked.slice(0, 4).map((match) => (
+                <li key={match.id} className="flex shrink-0 items-center gap-2 border border-line bg-panel px-3 py-3">
+                  <TeamLogo src={match.homeLogo} label={match.homeName} size="xs" />
+                  <span className="text-sm font-semibold">{match.homeName}</span>
+                  <span className="bg-accent px-2 py-0.5 text-xs font-semibold text-panel">A disputar</span>
+                  <span className="text-sm font-semibold">{match.awayName}</span>
+                  <TeamLogo src={match.awayLogo} label={match.awayName} size="xs" />
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          <p className="mt-2 text-xs text-muted">Placar do feed. Não entra na Taça de Domingo.</p>
+        </Container>
+      ) : null}
 
       <section className="border-b border-line bg-panel">
         <Container className="grid lg:grid-cols-[minmax(0,1.45fr)_minmax(0,0.7fr)]">
@@ -187,16 +234,18 @@ export const HomeView = async () => {
 
       <Container className="grid min-w-0 gap-12 pb-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
         <section className="min-w-0">
-          <SectionHeading title="Próximos jogos" href="/calendario" />
+          <SectionHeading title={roundTitle} href="/calendario" />
           <ul className="divide-y divide-line border-y border-line bg-panel">
             {upcoming.map((fixture) => (
               <li key={fixture.id} className="grid gap-1 px-4 py-3 sm:grid-cols-[7.5rem_1fr] sm:items-center">
                 <p className="text-xs text-muted capitalize">{formatKickoff(fixture.startsAt)}</p>
-                <p className="min-w-0 text-sm break-words">
+                <p className="flex min-w-0 flex-wrap items-center gap-2 text-sm break-words">
+                  <Crest slug={fixture.homeSlug} size="xs" />
                   <Link href={sideHref(fixture.homeSlug)} className="font-medium hover:text-accent">
                     {sideName(fixture.homeSlug)}
                   </Link>
-                  <span className="mx-2 text-muted">vs</span>
+                  <span className="text-muted">vs</span>
+                  <Crest slug={fixture.awaySlug} size="xs" />
                   <Link href={sideHref(fixture.awaySlug)} className="font-medium hover:text-accent">
                     {sideName(fixture.awaySlug)}
                   </Link>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { nav, site } from "@/config/site";
 import { pracas, tardes } from "@/data";
@@ -70,8 +71,8 @@ export const SiteShell = async (props: ISiteShellProps) => {
         <div className="border-b border-line bg-panel">
           <Container className="flex items-center justify-between gap-6 py-4">
             <Link href="/" className="flex min-w-0 items-center gap-3" aria-label={site.name}>
-              <span className="grid size-12 shrink-0 place-items-center bg-accent font-display text-lg font-semibold text-panel">
-                BD
+              <span className="grid size-12 shrink-0 place-items-center overflow-hidden bg-asphalt">
+                <Image src="/logo.png" alt="" width={48} height={48} className="size-full object-cover" />
               </span>
               <span className="min-w-0 leading-none">
                 <span className="block text-[11px] font-semibold tracking-[0.22em] text-highlight uppercase">Domingo</span>

@@ -2,8 +2,10 @@ import Link from "next/link";
 import { site } from "@/config/site";
 import type { ICrumbItem, IFixture } from "@/types";
 import { FixtureStatusEnum } from "@/types";
-import { categoriaName, sideColors, sideHref, sideName } from "@/data";
+import { categoriaName, sideColors, sideHref, sideName, sideShort } from "@/data";
 import { formatKickoff } from "@/lib/format";
+import type { IContextMatch } from "@/lib/contextFixtures";
+import { TeamLogo } from "@/components/TeamLogo";
 
 interface IContainerProps {
   children: React.ReactNode;
@@ -65,16 +67,46 @@ interface ICrestProps {
 
 export const Crest = (props: ICrestProps) => {
   const { slug, size = "sm" } = props;
-  const [left, right] = sideColors(slug);
-  const dim = size === "xs" ? "size-5" : "size-8";
+  const [ground, ink] = sideColors(slug);
+  const dim = size === "xs" ? "size-7 text-[8px]" : "size-9 text-[10px]";
 
   return (
     <span
       aria-hidden="true"
       title={sideName(slug)}
-      className={`inline-block shrink-0 ${dim}`}
-      style={{ background: `linear-gradient(90deg, ${left} 0 50%, ${right} 50% 100%)` }}
-    />
+      className={`inline-grid shrink-0 place-items-center border border-ink/15 font-semibold tracking-wide ${dim}`}
+      style={{ background: ground, color: ink }}
+    >
+      {sideShort(slug)}
+    </span>
+  );
+};
+
+interface IContextRowProps {
+  match: IContextMatch;
+}
+
+export const ContextRow = (props: IContextRowProps) => {
+  const { match } = props;
+
+  return (
+    <article className="grid min-w-0 items-center gap-3 border-b border-line py-4 sm:grid-cols-[9rem_minmax(0,1fr)]">
+      <p className="min-w-0 text-xs capitalize text-muted">{match.startsAt ? formatKickoff(match.startsAt) : match.competition}</p>
+      <div className="min-w-0">
+        <p className="text-[11px] font-semibold tracking-wide text-muted uppercase">{match.competition}</p>
+        <div className="mt-1 grid min-w-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2">
+          <p className="flex min-w-0 items-center justify-end gap-2 text-right text-sm font-medium">
+            <span className="truncate">{match.homeName}</span>
+            <TeamLogo src={match.homeLogo} label={match.homeName} size="xs" />
+          </p>
+          <p className="shrink-0 bg-asphalt px-2 py-1 text-center font-display text-lg text-panel tabular-nums">{match.score ?? "A disputar"}</p>
+          <p className="flex min-w-0 items-center gap-2 text-sm font-medium">
+            <TeamLogo src={match.awayLogo} label={match.awayName} size="xs" />
+            <span className="min-w-0 truncate">{match.awayName}</span>
+          </p>
+        </div>
+      </div>
+    </article>
   );
 };
 
