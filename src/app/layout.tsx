@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { QueryProvider } from "@/components/QueryProvider";
 import { Newsreader, Outfit } from "next/font/google";
 import { site } from "@/config/site";
@@ -74,6 +75,13 @@ const RootLayout = (props: IRootLayoutProps) => {
   return (
     <html lang="pt-BR" className={`${outfit.variable} ${newsreader.variable} h-full antialiased`}>
       <body className="min-h-full bg-page font-sans text-ink">
+        <Script src={`https://www.googletagmanager.com/gtag/js?id=${site.gaId}`} strategy="afterInteractive" />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${site.gaId}');`}
+        </Script>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />
         <QueryProvider>
           <SiteShell>{children}</SiteShell>

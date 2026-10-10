@@ -23,6 +23,7 @@
 ## Constraints
 
 - Portuguese only. Locale `pt-BR`. Time zone `America/Sao_Paulo`.
+- Google tag id `G-2N66EYN8XN` (`site.gaId`). Root layout loads gtag.js with `next/script` after interactive.
 - Palette: page `#F1EFEA`, asphalt `#231910`, accent `#9A3412`, highlight `#5B4636`.
 - No official federation or club tables. No official Brasileirão, Copa do Brasil, or Libertadores table. No named rosters.
 - `outputFileTracingRoot` is pinned to this app because the parent CMS folder has its own `node_modules`.

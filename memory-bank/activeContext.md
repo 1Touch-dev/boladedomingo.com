@@ -23,6 +23,8 @@ Launch desk for `boladedomingo.com`: Sunday football across Brazil, read from SÃ
 
 ## Recent
 
+- Google tag `G-2N66EYN8XN` loads from the root layout via `next/script` (`afterInteractive`). Measurement id lives on `site.gaId`. Privacy page names the cookie.
+
 - Resultados rows open `/resultados/[id]`. The website matches call times out after 8 seconds and the signed seed stays on the desk. Federation extracts stay off.
 
 - Hero HTML banners rewrite `boladedomingo.com` links to a same-site path and open them with `target="_top"`, so a click does not load the live host inside the sandboxed frame.

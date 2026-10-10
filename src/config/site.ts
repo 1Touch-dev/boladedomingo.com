@@ -4,6 +4,7 @@ export const site = {
   domain: "boladedomingo.com",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://boladedomingo.com",
   email: "redacao@boladedomingo.com",
+  gaId: "G-2N66EYN8XN",
   city: "São Paulo",
   country: "Brasil",
   category: "Football",

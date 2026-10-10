@@ -32,6 +32,9 @@ const PrivacyPage = () => (
       <p>
         O servidor pode registrar o pedido técnico habitual (endereço IP, navegador, página) para manter o site no ar. Isso não se vende nem se usa para montar um perfil.
       </p>
+      <p>
+        A mesa mede visitas com o Google Analytics ({site.gaId}). O script vem de googletagmanager.com e grava um cookie de medição no navegador.
+      </p>
     </div>
   </Container>
 );

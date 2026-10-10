@@ -11,6 +11,7 @@ Launch desk for Bola de Domingo / `boladedomingo.com`.
 - Local search over praças, tardes, and notes
 - Favicon and Open Graph image with BD
 - Canonical `pt-BR` + `x-default`, sitemap, robots, RSS, llms.txt, NewsArticle JSON-LD, manifest
+- Google Analytics tag `G-2N66EYN8XN` on every page (`site.gaId`, root layout)
 - `/en`, `/pt`, `/es` 308 to the unprefixed path
 - Newsletter client posts to the Brazil CMS `/subscriptions/subscribe`
 - Footer signup uses React Hook Form (`useForm`, `register`, `isSubmitting`)
