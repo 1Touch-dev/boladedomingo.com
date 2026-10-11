@@ -33,7 +33,7 @@ const robots = (): MetadataRoute.Robots => ({
     disallow: ["/newsletter/unsubscribe"],
   })),
   sitemap: [`${site.url}/sitemap.xml`, `${site.url}/news-sitemap.xml`],
-  host: site.url,
+  host: site.domain,
 });
 
 export default robots;

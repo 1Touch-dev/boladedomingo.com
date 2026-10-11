@@ -1,16 +1,41 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/config/site";
-import { categorias, pracas } from "@/data";
+import { articlesByDate, categorias, fixtures, pracas } from "@/data";
 import { loadDeskArticles } from "@/lib/deskArticles";
 import { loadDeskFixtures } from "@/lib/deskFixtures";
 
-/** Build-time static sitemap so Google Search Console can fetch reliably. */
+/** Build-time static sitemap so Google never hits a cold CMS/Lambda path. */
 export const dynamic = "force-static";
 export const revalidate = 3600;
+
+const CMS_MS = 3500;
 const TWO_DAYS = 2 * 24 * 60 * 60 * 1000;
 
+const asDate = (value?: string): Date => {
+  if (!value) return new Date();
+  const date = new Date(value);
+  return Number.isFinite(date.getTime()) ? date : new Date();
+};
+
+const withTimeout = async <T>(promise: Promise<T>, fallback: T): Promise<T> => {
+  const timedOut = Symbol("sitemap-timeout");
+  try {
+    const result = await Promise.race([
+      promise,
+      new Promise<typeof timedOut>((resolve) => {
+        setTimeout(() => resolve(timedOut), CMS_MS);
+      }),
+    ]);
+    return result === timedOut ? fallback : result;
+  } catch {
+    return fallback;
+  }
+};
+
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
-  const articles = await loadDeskArticles();
+  const seedArticles = articlesByDate();
+  const articles = await withTimeout(loadDeskArticles(), seedArticles);
+  const fixtureRows = await withTimeout(loadDeskFixtures(), fixtures);
   const now = new Date();
   const hubs = ["/noticias", "/pracas", "/tardes", "/calendario", "/resultados", "/categorias"];
   const quiet = ["/contato", "/sobre", "/privacidade", "/termos"];
@@ -30,7 +55,7 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
       priority: 0.3,
     })),
     ...articles.map((article) => {
-      const modified = new Date(article.updatedAt || article.publishedAt);
+      const modified = asDate(article.updatedAt || article.publishedAt);
       const recent = now.getTime() - modified.getTime() <= TWO_DAYS;
       return {
         url: `${site.url}/noticias/${article.slug}`,
@@ -51,9 +76,9 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
       changeFrequency: "weekly" as const,
       priority: 0.5,
     })),
-    ...(await loadDeskFixtures()).map((fixture) => ({
+    ...fixtureRows.map((fixture) => ({
       url: `${site.url}/resultados/${fixture.id}`,
-      lastModified: new Date(fixture.startsAt),
+      lastModified: asDate(fixture.startsAt),
       changeFrequency: "weekly" as const,
       priority: 0.5,
     })),
