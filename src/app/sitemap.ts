@@ -4,6 +4,9 @@ import { categorias, pracas } from "@/data";
 import { loadDeskArticles } from "@/lib/deskArticles";
 import { loadDeskFixtures } from "@/lib/deskFixtures";
 
+/** Build-time static sitemap so Google Search Console can fetch reliably. */
+export const dynamic = "force-static";
+export const revalidate = 3600;
 const TWO_DAYS = 2 * 24 * 60 * 60 * 1000;
 
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {

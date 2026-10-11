@@ -91,8 +91,16 @@ const nextConfig: NextConfig = {
       ],
     },
     {
-      source: "/:file(rss.xml|sitemap.xml|news-sitemap.xml|llms.txt)",
+      source: "/:file(rss.xml|news-sitemap.xml|llms.txt)",
       headers: [{ key: "Access-Control-Allow-Origin", value: "*" }],
+    },
+    {
+      source: "/sitemap.xml",
+      headers: [
+        { key: "Access-Control-Allow-Origin", value: "*" },
+        { key: "Cache-Control", value: "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400" },
+        { key: "Content-Type", value: "application/xml; charset=utf-8" },
+      ],
     },
   ],
 };
