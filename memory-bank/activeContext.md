@@ -22,8 +22,6 @@ Launch desk for `boladedomingo.com`: Sunday football across Brazil, read from SÃ
 
 ## Recent
 
-- Before commit, `yarn check:apis` prints how many article APIs are wired and how many are not. Default is this desk. Another Postman folder is `--collection <file> --folder "<desk>"`, and `--root <repo>` checks that site's source. Without `--root`, another folder is live-only.
-
 - `/secoes` lists every Postman article endpoint (HomePage through Other). Each opens `/secoes/[slug]` and loads that exact `endpoint`. Article by slug stays on `/noticias/[slug]`.
 
 - Masthead mark now renders as an inline premium `BD` block in `SiteShell`, so the header no longer depends on `/logo.png` route resolution.

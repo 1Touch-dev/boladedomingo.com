@@ -8,7 +8,6 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "check:apis": "node scripts/checkDeskApis.mjs",
     "precommit": "yarn lint && yarn build",
     "prepare": "husky"
   },

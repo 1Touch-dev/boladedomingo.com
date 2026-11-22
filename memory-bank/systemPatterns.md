@@ -17,7 +17,6 @@ Component filenames are PascalCase (`SiteShell.tsx`, `HomeView.tsx`). Lib, data,
 - Taça de Domingo and Circuito da Tarde tables are derived from live fixtures in `src/lib/deskFixtures.ts`.
 - Rodada da Copa does not enter the Taça de Domingo table.
 - Seleção, mercado, and bastidores have notes and no signed official score.
-- `yarn check:apis` (`scripts/checkDeskApis.mjs`) is the desk article API checklist. It does not run inside Husky. Run it before commit.
 
 ## Types
 

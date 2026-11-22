@@ -21,7 +21,6 @@ Launch desk for Bola de Domingo / `boladedomingo.com`.
 - Static taxonomy for praças, tardes, and categorias lives in `src/data/taxonomy.ts`.
 - Removed non-core API extras: editorial hero, partner banner placements, popup banners, and reader reaction/sentiment.
 - Husky 9.1.7 with `yarn precommit`
-- `yarn check:apis` is the pre-commit API checklist: Postman contract vs `cmsEndpoints` vs live `api.boladedomingo.com`
 - Memory bank and `.cursorrules`
 
 ## Left

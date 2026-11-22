@@ -33,3 +33,6 @@ next-env.d.ts
 
 # vercel
 .vercel
+
+# local API checklist, kept off the remote
+/scripts/
