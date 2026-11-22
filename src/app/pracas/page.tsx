@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SectionNotes } from "@/components/SectionNotes";
+import { EndpointNotes } from "@/components/EndpointNotes";
 import { pracas } from "@/data";
-import { loadArticlesForPath } from "@/lib/deskArticles";
+import { endpointsForHref } from "@/lib/cmsEndpoints";
 import { loadDeskFixtures, pracaDeskTable } from "@/lib/deskFixtures";
 import { pageMetadata } from "@/lib/seo";
 import { Container, PageHeader, Stripe } from "@/components/ui";
@@ -16,7 +16,7 @@ export const metadata: Metadata = pageMetadata({
 });
 
 const PracasPage = async () => {
-  const [fixtures, notes] = await Promise.all([loadDeskFixtures(), loadArticlesForPath("/pracas", 20)]);
+  const fixtures = await loadDeskFixtures();
   const rows = pracaDeskTable(fixtures);
 
   return (
@@ -59,11 +59,7 @@ const PracasPage = async () => {
           </li>
         ))}
       </ul>
-      <SectionNotes
-        title="Notas de equipes e tabela"
-        notes={notes}
-        empty="Ainda não há notas dos endpoints Equipes ou Tabela de classificação."
-      />
+      <EndpointNotes endpoints={endpointsForHref("/pracas")} />
     </Container>
   );
 };

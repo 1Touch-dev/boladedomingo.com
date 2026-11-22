@@ -250,7 +250,7 @@ const TeamDetailPage = async (props: PageProps) => {
           <MatchStrip title="Próximos" rows={page.upcoming} empty="Sem jogos marcados nesta janela." />
           <MatchStrip title="Recentes" rows={page.recent} empty="Sem resultados recentes nesta janela." />
         </div>
-        <div id="elenco" className="lg:sticky lg:top-6">
+        <div id="elenco" className="scroll-mt-52 lg:sticky lg:top-52">
           <SquadBlock squad={page.squad} />
         </div>
       </div>

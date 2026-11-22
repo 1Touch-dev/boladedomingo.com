@@ -26,6 +26,7 @@ export const site = {
 
 export const nav = [
   { href: "/noticias", label: "Notícias" },
+  { href: "/secoes", label: "Seções" },
   { href: "/futebol", label: "Futebol" },
   { href: "/pracas", label: "Praças" },
   { href: "/tardes", label: "Tardes" },

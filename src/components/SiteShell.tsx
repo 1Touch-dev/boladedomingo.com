@@ -2,7 +2,7 @@ import Link from "next/link";
 import { BrandMark } from "@/components/BrandMark";
 import { nav, site } from "@/config/site";
 import { pracas, tardes } from "@/data";
-import { HOME_ARTICLE_ENDPOINT } from "@/lib/cmsEndpoints";
+import { HOME_ARTICLE_ENDPOINT, publicArticleFeeds } from "@/lib/cmsEndpoints";
 import { loadArticlesByEndpoint } from "@/lib/deskArticles";
 import { DeskDate } from "@/components/DeskDate";
 import { FooterNewsletter } from "@/components/FooterNewsletter";
@@ -34,6 +34,13 @@ const searchItems = async (): Promise<ISearchItem[]> => {
       href: `/tardes#${item.slug}`,
       slug: item.slug,
     })),
+    ...publicArticleFeeds.map((item) => ({
+      type: SearchKindEnum.SECAO,
+      title: item.name,
+      subtitle: "Endpoint da coleção",
+      href: `/secoes/${item.slug}`,
+      slug: item.slug,
+    })),
     ...notes.map((item) => ({
       type: SearchKindEnum.NOTA,
       title: item.title,
@@ -56,7 +63,7 @@ export const SiteShell = async (props: ISiteShellProps) => {
       >
         Ir para o conteúdo
       </a>
-      <header>
+      <header className="sticky top-0 z-40 shadow-[0_8px_24px_rgba(35,25,16,0.12)]">
         <div className="bg-ink text-[11px] text-panel/70">
           <Container className="flex items-center justify-between gap-4 py-2">
             <DeskDate className="capitalize" />

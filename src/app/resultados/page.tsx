@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { EndpointNotes } from "@/components/EndpointNotes";
 import { MatchRow } from "@/components/football/FootballBoard";
-import { SectionNotes } from "@/components/SectionNotes";
-import { loadArticlesForPath } from "@/lib/deskArticles";
+import { endpointsForHref } from "@/lib/cmsEndpoints";
 import { getCrossLeagueFixtures } from "@/lib/football";
 import { pageMetadata } from "@/lib/seo";
 import { Container, PageHeader } from "@/components/ui";
@@ -16,10 +16,7 @@ export const metadata: Metadata = pageMetadata({
 });
 
 const ResultsPage = async () => {
-  const [{ completed }, notes] = await Promise.all([
-    getCrossLeagueFixtures(),
-    loadArticlesForPath("/resultados", 20),
-  ]);
+  const { completed } = await getCrossLeagueFixtures();
 
   return (
     <Container className="py-10">
@@ -42,7 +39,7 @@ const ResultsPage = async () => {
           Ver classificação e artilharia
         </Link>
       </p>
-      <SectionNotes title="Notas de partidas" notes={notes} empty="Ainda não há notas dos feeds Brasileirão, Série B ou Copa do Brasil." />
+      <EndpointNotes endpoints={endpointsForHref("/resultados")} />
     </Container>
   );
 };

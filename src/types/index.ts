@@ -22,6 +22,7 @@ export enum SearchKindEnum {
   PRACA = "Praça",
   TARDE = "Tarde",
   NOTA = "Nota",
+  SECAO = "Seção",
 }
 
 export interface IPraca {

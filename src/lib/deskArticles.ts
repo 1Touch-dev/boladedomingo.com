@@ -8,6 +8,7 @@ import {
   endpointsForHref,
   HOME_ARTICLE_ENDPOINT,
   isNoiseAssignment,
+  selectEndpointRows,
 } from "@/lib/cmsEndpoints";
 import {
   assignmentNames,
@@ -32,11 +33,6 @@ import type { ICmsArticle } from "@/apis/articles/articles.type";
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null;
-
-const namesIncludeEndpoint = (names: string[], endpoint: string) => {
-  const target = endpoint.trim().toLowerCase();
-  return names.some((name) => name.trim().toLowerCase() === target);
-};
 
 const categoriaFrom = (article: ICmsArticle, endpoint?: string): CategoriaSlugEnum => {
   const mapped = endpoint ? cmsEndpointByName(endpoint)?.categoria : undefined;
@@ -89,7 +85,7 @@ export const mapCmsArticle = (article: ICmsArticle, endpoint?: string): IArticle
     updatedAt: article.updatedAt || article.scheduledTime || article.createdAt,
     author: article.authorNames?.[0] || "Redação",
     relatedSlugs: [],
-    coverImage: article.imageUrls?.find((url) => url.startsWith("http")),
+    coverImage: coverFrom(article),
     sectionLabel: section,
   };
 };
@@ -127,21 +123,8 @@ const fetchEndpointPage = async (endpoint: string, page: number, limit: number):
   return { rows: list.rows, total, totalPages: list.totalPages };
 };
 
-const rowsForEndpoint = (endpoint: string, rows: ICmsArticle[], total: number | null): ICmsArticle[] => {
-  if (endpoint === HOME_ARTICLE_ENDPOINT) {
-    return rows.filter((row) => {
-      const names = assignmentNames(row);
-      if (names.length === 0) return true;
-      return !names.every((name) => isNoiseAssignment(name));
-    });
-  }
-
-  const matched = rows.filter((row) => namesIncludeEndpoint(assignmentNames(row), endpoint));
-  if (matched.length > 0) return matched;
-  if (total === 0) return [];
-  if (total !== null && total > 0) return rows;
-  return [];
-};
+const rowsForEndpoint = (endpoint: string, rows: ICmsArticle[], total: number | null): ICmsArticle[] =>
+  selectEndpointRows(endpoint, rows, total);
 
 const mapRows = (rows: ICmsArticle[], endpoint?: string): IArticle[] =>
   rows
@@ -159,7 +142,47 @@ const dedupeSort = (articles: IArticle[]): IArticle[] => {
     .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 };
 
-export const loadArticlesByEndpoint = cache(async (endpoint: string, limit = 40): Promise<IArticle[]> => {
+interface IEndpointBatch {
+  articles: IArticle[];
+  fallback: boolean;
+}
+
+const fetchCover = cache(async (slug: string): Promise<string | undefined> => {
+  try {
+    const url = new URL(`${envConfig.apiBaseUrl}/ai-articles/slug/${encodeURIComponent(slug)}`);
+    url.searchParams.set("targetWebsite", envConfig.targetWebsite);
+    const response = await fetch(url, {
+      headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(ARTICLE_FETCH_TIMEOUT_MS),
+      next: { revalidate: 120 },
+    });
+    if (!response.ok) return undefined;
+    const payload: unknown = await response.json();
+    const article =
+      readCmsArticle(payload) ??
+      (isRecord(payload) && "data" in payload ? readCmsArticle(payload.data) : null);
+    return article ? coverFrom(article) : undefined;
+  } catch {
+    return undefined;
+  }
+});
+
+const hydrateCovers = async (articles: IArticle[]): Promise<IArticle[]> => {
+  const missing = articles.filter((article) => !article.coverImage);
+  const queue = [...missing];
+  const workers = Array.from({ length: Math.min(6, queue.length) }, async () => {
+    while (queue.length > 0) {
+      const article = queue.shift();
+      if (!article) return;
+      const cover = await fetchCover(article.slug);
+      if (cover) article.coverImage = cover;
+    }
+  });
+  await Promise.all(workers);
+  return articles;
+};
+
+const loadEndpointBatch = cache(async (endpoint: string, limit = 40): Promise<IEndpointBatch> => {
   try {
     const pageSize = Math.min(Math.max(limit, 1), 100);
     const first = await fetchEndpointPage(endpoint, 1, pageSize);
@@ -172,17 +195,28 @@ export const loadArticlesByEndpoint = cache(async (endpoint: string, limit = 40)
       rows.push(...rowsForEndpoint(endpoint, next.rows, next.total));
     }
 
-    return dedupeSort(mapRows(rows, endpoint)).slice(0, limit);
+    const articles = await hydrateCovers(dedupeSort(mapRows(rows, endpoint)).slice(0, limit));
+    return {
+      articles,
+      fallback: first.total === 0,
+    };
   } catch {
-    return [];
+    return { articles: [], fallback: false };
   }
+});
+
+export const loadArticlesByEndpoint = cache(async (endpoint: string, limit = 40): Promise<IArticle[]> => {
+  const batch = await loadEndpointBatch(endpoint, limit);
+  return batch.articles;
 });
 
 export const loadArticlesByEndpoints = cache(async (endpoints: string[], limit = 40): Promise<IArticle[]> => {
   const unique = [...new Set(endpoints.map((item) => item.trim()).filter(Boolean))];
   if (unique.length === 0) return [];
-  const batches = await Promise.all(unique.map((endpoint) => loadArticlesByEndpoint(endpoint, limit)));
-  return dedupeSort(batches.flat()).slice(0, limit);
+  const batches = await Promise.all(unique.map((endpoint) => loadEndpointBatch(endpoint, limit)));
+  const real = batches.filter((batch) => !batch.fallback && batch.articles.length > 0);
+  const chosen = real.length > 0 ? real : batches;
+  return dedupeSort(chosen.flatMap((batch) => batch.articles)).slice(0, limit);
 });
 
 export const loadArticlesForCategoria = cache(async (categoria: CategoriaSlugEnum, limit = 40): Promise<IArticle[]> => {

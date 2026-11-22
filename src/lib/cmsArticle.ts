@@ -319,10 +319,29 @@ const keywordLine = (keywords: string[] | string | undefined): string => {
   return "";
 };
 
+const httpUrl = (value: unknown): string | undefined =>
+  typeof value === "string" && value.startsWith("http") ? value : undefined;
+
+const schemaImage = (schema: ICmsArticle["schemaMarkup"]): string | undefined => {
+  if (!schema) return undefined;
+  const image = schema.image;
+  const direct = httpUrl(image);
+  if (direct) return direct;
+  if (isRecord(image)) return httpUrl(image.url);
+  if (!Array.isArray(image)) return undefined;
+  for (const item of image) {
+    const url = httpUrl(item) || (isRecord(item) ? httpUrl(item.url) : undefined);
+    if (url) return url;
+  }
+  return undefined;
+};
+
 export const coverFrom = (article: ICmsArticle): string | undefined => {
-  const image = article.imageUrls?.find((url) => url.startsWith("http"));
-  if (image) return image;
-  return article.markdownImages?.find((url) => url.startsWith("http"));
+  const listed = article.imageUrls?.find((url) => url.startsWith("http"));
+  if (listed) return listed;
+  const markdown = article.markdownImages?.find((url) => url.startsWith("http"));
+  if (markdown) return markdown;
+  return schemaImage(article.schemaMarkup);
 };
 
 export const jsonLdFor = (article: ICmsArticle, canonical: string): unknown[] => {

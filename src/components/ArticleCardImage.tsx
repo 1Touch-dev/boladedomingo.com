@@ -21,6 +21,11 @@ export const ArticleCardImage = (props: IArticleCardImageProps) => {
   if (!src || failedSrc === src) {
     return (
       <div className={`relative overflow-hidden border-b border-line bg-page ${height}`}>
+        {label ? (
+          <span className="utility-label-soft absolute top-3 left-3 z-10 rounded-sm bg-panel/85 px-2 py-1 text-[10px] font-semibold text-accent shadow-sm backdrop-blur-sm">
+            {label}
+          </span>
+        ) : null}
         <Image src="/brand/fallback.png" alt="Bola de Domingo" fill sizes={sizes} className="object-contain" />
       </div>
     );

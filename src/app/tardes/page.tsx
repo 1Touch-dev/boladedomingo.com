@@ -1,9 +1,9 @@
 import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
 import { AffiliateFeed } from "@/components/affiliate/AffiliateFeed";
 import type { Metadata } from "next";
-import { SectionNotes } from "@/components/SectionNotes";
+import { EndpointNotes } from "@/components/EndpointNotes";
 import { tardes } from "@/data";
-import { loadArticlesForCategoria } from "@/lib/deskArticles";
+import { endpointsForCategoria, endpointsForHref } from "@/lib/cmsEndpoints";
 import { loadDeskFixtures, tardeDeskTable } from "@/lib/deskFixtures";
 import { pageMetadata } from "@/lib/seo";
 import { CategoriaSlugEnum } from "@/types";
@@ -18,10 +18,8 @@ export const metadata: Metadata = pageMetadata({
 });
 
 const TardesPage = async () => {
-  const [fixtures, notes] = await Promise.all([
-    loadDeskFixtures(),
-    loadArticlesForCategoria(CategoriaSlugEnum.TARDE, 20),
-  ]);
+  const fixtures = await loadDeskFixtures();
+  const noteEndpoints = [...endpointsForCategoria(CategoriaSlugEnum.TARDE), ...endpointsForHref("/tardes")];
   const rounds = fixtures.filter((fixture) => fixture.competition.startsWith("Circuito da Tarde"));
   const rows = tardeDeskTable(fixtures);
 
@@ -48,7 +46,7 @@ const TardesPage = async () => {
       <AffiliateBanner preset="landscape" className="mt-8" />
       <ul className="mt-8 grid gap-4 sm:grid-cols-2">
         <AffiliateFeed cards list>{tardes.map((tarde) => (
-          <li key={tarde.slug} id={tarde.slug} className="scroll-mt-28 border border-line bg-panel p-4">
+          <li key={tarde.slug} id={tarde.slug} className="scroll-mt-52 border border-line bg-panel p-4">
             <h2 className="font-sans text-xl font-semibold text-ink">{tarde.name}</h2>
             <p className="mt-2 text-sm leading-relaxed text-muted">{tarde.note}</p>
           </li>
@@ -64,7 +62,7 @@ const TardesPage = async () => {
           </div>
         </section>
       ) : null}
-      <SectionNotes title="Notas da tarde" notes={notes} empty="Ainda não há notas do endpoint Libertadores." />
+      <EndpointNotes endpoints={noteEndpoints} />
     </Container>
   );
 };

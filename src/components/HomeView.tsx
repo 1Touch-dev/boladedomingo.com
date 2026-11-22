@@ -16,6 +16,7 @@ import { FooterNewsletter } from "@/components/FooterNewsletter";
 import { StandingsTable } from "@/components/StandingsTable";
 import { TeamLogo } from "@/components/TeamLogo";
 import { Container, Crest, SectionHeading } from "@/components/ui";
+import { publicArticleFeeds } from "@/lib/cmsEndpoints";
 import { loadDeskArticles } from "@/lib/deskArticles";
 import { getContextMatches, getScheduledContextMatches } from "@/lib/contextFixtures";
 import { finishedDeskFixtures, loadDeskFixtures, pracaDeskTable, scheduledDeskFixtures, upcomingDeskFixtures } from "@/lib/deskFixtures";
@@ -286,6 +287,18 @@ export const HomeView = async () => {
             </li>
           ))}
         </ul>
+        <div className="mt-10">
+          <SectionHeading eyebrow="Coleção" title="Todas as seções" href="/secoes" />
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {publicArticleFeeds.map((feed) => (
+              <li key={feed.slug} className="border border-line bg-panel">
+                <Link href={`/secoes/${feed.slug}`} className="block px-4 py-3 font-sans text-base font-semibold text-ink hover:text-accent">
+                  {feed.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </Container>
     </>
   );

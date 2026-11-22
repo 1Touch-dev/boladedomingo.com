@@ -2,6 +2,7 @@ import { AffiliateFeed } from "@/components/affiliate/AffiliateFeed";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { categorias } from "@/data";
+import { publicArticleFeeds } from "@/lib/cmsEndpoints";
 import { pageMetadata } from "@/lib/seo";
 import { Container, PageHeader } from "@/components/ui";
 
@@ -30,6 +31,16 @@ const CategoriasPage = () => (
           <p className="mt-3 text-sm text-ink">{item.where}</p>
         </li>
       ))}</AffiliateFeed>
+    </ul>
+    <h2 className="mt-12 font-sans text-2xl font-semibold text-ink">Endpoints</h2>
+    <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {publicArticleFeeds.map((feed) => (
+        <li key={feed.slug} className="border border-line bg-panel">
+          <Link href={`/secoes/${feed.slug}`} className="block px-4 py-3 font-semibold text-ink hover:text-accent">
+            {feed.name}
+          </Link>
+        </li>
+      ))}
     </ul>
   </Container>
 );

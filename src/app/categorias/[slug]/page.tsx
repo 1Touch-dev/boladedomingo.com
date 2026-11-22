@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { EndpointNotes } from "@/components/EndpointNotes";
 import { byCategoria, categorias, getCategoria } from "@/data";
-import { SectionNotes } from "@/components/SectionNotes";
-import { loadArticlesForCategoria } from "@/lib/deskArticles";
+import { endpointsForCategoria } from "@/lib/cmsEndpoints";
 import { loadDeskFixtures } from "@/lib/deskFixtures";
 import { pageMetadata } from "@/lib/seo";
 import { CategoriaSlugEnum } from "@/types";
@@ -35,10 +35,7 @@ const CategoriaPage = async (props: ISlugPageProps) => {
   const categoria = getCategoria(slug);
   if (!categoria) notFound();
 
-  const [fixtures, relatedStories] = await Promise.all([
-    loadDeskFixtures(),
-    loadArticlesForCategoria(categoria.slug, 40),
-  ]);
+  const fixtures = await loadDeskFixtures();
   const games = byCategoria(categoria.slug, fixtures);
 
   return (
@@ -65,7 +62,7 @@ const CategoriaPage = async (props: ISlugPageProps) => {
           </p>
         )}
       </section>
-      <SectionNotes notes={relatedStories} />
+      <EndpointNotes endpoints={endpointsForCategoria(categoria.slug)} />
     </Container>
   );
 };

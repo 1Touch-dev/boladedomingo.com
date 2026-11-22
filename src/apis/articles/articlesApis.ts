@@ -1,6 +1,5 @@
 import { envConfig } from "@/config/env";
-import { assignmentNames } from "@/lib/cmsArticle";
-import { HOME_ARTICLE_ENDPOINT, isNoiseAssignment } from "@/lib/cmsEndpoints";
+import { HOME_ARTICLE_ENDPOINT, selectEndpointRows } from "@/lib/cmsEndpoints";
 import httpService from "@/services/httpService";
 import type { IApiSuccessResponse } from "@/types/api";
 import type { IArticleListParams, ICmsArticle } from "./articles.type";
@@ -34,24 +33,6 @@ const unwrapOne = (body: unknown): ICmsArticle | null => {
   return asArticle(body.data);
 };
 
-const filterRows = (endpoint: string, rows: ICmsArticle[], total: number | null): ICmsArticle[] => {
-  if (endpoint === HOME_ARTICLE_ENDPOINT) {
-    return rows.filter((row) => {
-      const names = assignmentNames(row);
-      if (names.length === 0) return true;
-      return !names.every((name) => isNoiseAssignment(name));
-    });
-  }
-
-  const matched = rows.filter((row) =>
-    assignmentNames(row).some((name) => name.trim().toLowerCase() === endpoint.trim().toLowerCase()),
-  );
-  if (matched.length > 0) return matched;
-  if (total === 0) return [];
-  if (total !== null && total > 0) return rows;
-  return [];
-};
-
 const articlesApis = {
   getAll: async (params?: IArticleListParams): Promise<IApiSuccessResponse<ICmsArticle[]>> => {
     const endpoint = params?.endpoint?.trim() || HOME_ARTICLE_ENDPOINT;
@@ -68,7 +49,7 @@ const articlesApis = {
     });
 
     const { rows, total } = unwrapList(body);
-    return { success: true, message: "ok", data: filterRows(endpoint, rows, total) };
+    return { success: true, message: "ok", data: selectEndpointRows(endpoint, rows, total) };
   },
 
   getById: async (slug: string): Promise<IApiSuccessResponse<ICmsArticle>> => {

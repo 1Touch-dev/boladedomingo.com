@@ -16,11 +16,12 @@ Launch desk for Bola de Domingo / `boladedomingo.com`.
 - `/en`, `/pt`, `/es` 308 to the unprefixed path
 - Newsletter client posts to the Brazil CMS `/subscriptions/subscribe`
 - Footer signup uses React Hook Form (`useForm`, `register`, `isSubmitting`)
-- News catalog: `GET /ai-articles?targetWebsite=boladedomingo.com` on `api.football360brazil.com`. Home, notícias, categorias, search, sitemap, and RSS use it. No local article fallback remains.
-- Fixtures catalog: `GET /football/matches?website=boladedomingo.com` on `api.football360brazil.com`. Home, calendário, resultados, praça pages, tarde pages, and live-derived tables use it. No local fixture fallback remains.
+- News catalog: `GET /ai-articles?targetWebsite=boladedomingo.com` on `api.boladedomingo.com`. Home, notícias, categorias, search, sitemap, and RSS use it. No local article fallback remains.
+- Fixtures catalog: `GET /football/matches?website=boladedomingo.com` on `api.boladedomingo.com`. Home, calendário, resultados, praça pages, tarde pages, and live-derived tables use it. No local fixture fallback remains.
 - Static taxonomy for praças, tardes, and categorias lives in `src/data/taxonomy.ts`.
 - Removed non-core API extras: editorial hero, partner banner placements, popup banners, and reader reaction/sentiment.
 - Husky 9.1.7 with `yarn precommit`
+- `yarn check:apis` is the pre-commit API checklist: Postman contract vs `cmsEndpoints` vs live `api.boladedomingo.com`
 - Memory bank and `.cursorrules`
 
 ## Left
@@ -29,6 +30,8 @@ Launch desk for Bola de Domingo / `boladedomingo.com`.
 - Add live endpoints for praça/tarde/category descriptors if the CMS starts owning that taxonomy too
 
 ## Known
+
+- Empty Postman sections (`meta.total` 0) still return the CMS fallback feed. The site shows that feed only on pages with no classified notes (tarde, bastidores, tardes). Classified feeds stay in front on domingo, copa, seleção, mercado, praças, calendário, and resultados.
 
 - Scores are the desk's own signed praças and tardes. They are not a CBF, Brasileirão, Copa do Brasil, Libertadores, or club table.
 - No named rosters.

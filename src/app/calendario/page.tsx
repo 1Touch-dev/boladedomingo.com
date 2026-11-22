@@ -1,10 +1,10 @@
 import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { EndpointNotes } from "@/components/EndpointNotes";
 import { MatchRow } from "@/components/football/FootballBoard";
-import { SectionNotes } from "@/components/SectionNotes";
 import { site } from "@/config/site";
-import { loadArticlesForPath } from "@/lib/deskArticles";
+import { endpointsForHref } from "@/lib/cmsEndpoints";
 import type { IFootballMatch } from "@/lib/football";
 import { getCrossLeagueFixtures } from "@/lib/football";
 import { dayKey, formatDay } from "@/lib/format";
@@ -49,10 +49,7 @@ const DayList = (props: IDayListProps) => {
 };
 
 const CalendarPage = async () => {
-  const [{ upcoming }, notes] = await Promise.all([
-    getCrossLeagueFixtures(),
-    loadArticlesForPath("/calendario", 20),
-  ]);
+  const { upcoming } = await getCrossLeagueFixtures();
 
   const events = {
     "@context": "https://schema.org",
@@ -90,11 +87,7 @@ const CalendarPage = async () => {
           Ver futebol completo
         </Link>
       </p>
-      <SectionNotes
-        title="Notas do calendário"
-        notes={notes}
-        empty="Ainda não há notas dos feeds Brasileirão, Libertadores ou Seleção."
-      />
+      <EndpointNotes endpoints={endpointsForHref("/calendario")} />
     </Container>
   );
 };

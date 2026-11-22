@@ -17,6 +17,7 @@ Component filenames are PascalCase (`SiteShell.tsx`, `HomeView.tsx`). Lib, data,
 - Taça de Domingo and Circuito da Tarde tables are derived from live fixtures in `src/lib/deskFixtures.ts`.
 - Rodada da Copa does not enter the Taça de Domingo table.
 - Seleção, mercado, and bastidores have notes and no signed official score.
+- `yarn check:apis` (`scripts/checkDeskApis.mjs`) is the desk article API checklist. It does not run inside Husky. Run it before commit.
 
 ## Types
 
@@ -24,7 +25,7 @@ Interfaces use an `I` prefix. Enums use an `Enum` suffix. See `memory-bank/api-p
 
 ## Sports client
 
-Editorial notes come from Brazil CMS: `GET {NEXT_PUBLIC_CMS_URL}/ai-articles?targetWebsite={NEXT_PUBLIC_WEBSITE_KEY}`. Defaults are `https://api.football360brazil.com/api` and `boladedomingo.com`. `src/lib/deskArticles.ts` maps the catalog onto `IArticle` and the desk renders that list. `articlesApis` uses the Axios `HttpService` for the same path. `SportsSync` warms the article query only.
+Editorial notes come from Brazil CMS: `GET {NEXT_PUBLIC_CMS_URL}/ai-articles?targetWebsite={NEXT_PUBLIC_WEBSITE_KEY}`. Defaults are `https://api.boladedomingo.com/api` and `boladedomingo.com`. `src/lib/deskArticles.ts` maps the catalog onto `IArticle` and the desk renders that list. `articlesApis` uses the Axios `HttpService` for the same path. `SportsSync` warms the article query only.
 
 Scheduled articles in the future and `publishState=needs_review` stay off the desk. If the catalog is empty or the host fails, pages render explicit empty states rather than local fallback content.
 

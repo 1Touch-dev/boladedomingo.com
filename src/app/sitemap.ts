@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/config/site";
 import { categorias, pracas } from "@/data";
+import { publicArticleFeeds } from "@/lib/cmsEndpoints";
 import { loadDeskArticles } from "@/lib/deskArticles";
 import { loadDeskFixtures } from "@/lib/deskFixtures";
 
@@ -23,6 +24,7 @@ const entry = (
 const staticRoutes: Array<{ path: string; changeFrequency: Freq; priority: number }> = [
   { path: "/", changeFrequency: "hourly", priority: 1 },
   { path: "/noticias", changeFrequency: "daily", priority: 0.9 },
+  { path: "/secoes", changeFrequency: "daily", priority: 0.7 },
   { path: "/futebol", changeFrequency: "hourly", priority: 0.9 },
   { path: "/pracas", changeFrequency: "daily", priority: 0.8 },
   { path: "/tardes", changeFrequency: "daily", priority: 0.8 },
@@ -49,6 +51,8 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
     entry(`/categorias/${categoria.slug}`, now, "weekly", 0.55),
   );
 
+  const feedEntries = publicArticleFeeds.map((feed) => entry(`/secoes/${feed.slug}`, now, "daily", 0.6));
+
   const articleEntries = articles.map((article) =>
     entry(
       `/noticias/${article.slug}`,
@@ -62,7 +66,7 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
     entry(`/resultados/${fixture.id}`, new Date(fixture.startsAt), "weekly", 0.5),
   );
 
-  return [...staticEntries, ...pracaEntries, ...categoriaEntries, ...articleEntries, ...resultadoEntries];
+  return [...staticEntries, ...pracaEntries, ...categoriaEntries, ...feedEntries, ...articleEntries, ...resultadoEntries];
 };
 
 export default sitemap;
